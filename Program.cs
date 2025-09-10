@@ -11,13 +11,13 @@ class Program
     {
         System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
 
-        string excelFilePath = @"c:\VIR\BI\ARBEV_2023_2024.xlsx";
+        string excelFilePath = @"c:\VIR\BI\PL_ELABE.xlsx";
         string connectionString = $"Server={Environment.GetEnvironmentVariable("VIR_SQL_SERVER_NAME")};" +
                                   $"Database={Environment.GetEnvironmentVariable("VIR_SQL_DATABASE")};" +
                                   $"User Id={Environment.GetEnvironmentVariable("VIR_SQL_USER")};" +
                                   $"Password={Environment.GetEnvironmentVariable("VIR_SQL_PASSWORD")};" +
                                   "Connection Timeout=50000;Trust Server Certificate=true";
-        string destinationTable = "dbo.VIR_Arbev_Archive";
+        string destinationTable = "Fakturownia_PL_ELABE";
 
         DataTable dataTable = ReadExcelFile(excelFilePath);
 
@@ -64,6 +64,8 @@ class Program
 
         if (exists == 1)
         {
+            var truncateCmd = new SqlCommand($"TRUNCATE TABLE {tableName}", connection);
+            truncateCmd.ExecuteNonQuery();
             Console.WriteLine($"Table {tableName} already exists. Skipping CREATE.");
             return;
         }
